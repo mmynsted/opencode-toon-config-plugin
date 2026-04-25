@@ -105,7 +105,7 @@ function resolveEvaluate(options: PluginOptions | undefined): boolean {
 }
 
 const plugin: PluginModule = {
-  id: "opencode-agents-toon",
+  id: "opencode-toon-config-plugin",
   server: async ({ directory, worktree }, options) => {
     const evaluate = resolveEvaluate(options)
     const filePath = locate(directory, worktree)

@@ -1,4 +1,4 @@
-# opencode-agents-toon
+# opencode-toon-config-plugin
 
 An [OpenCode](https://opencode.ai) plugin that loads `AGENTS.toon` as your project rules file.
 
@@ -69,25 +69,12 @@ current.
 
 ## Installation
 
-### npm
-
-```sh
-npm install opencode-agents-toon
-```
-
-```json
-{
-  "$schema": "https://opencode.ai/config.json",
-  "plugin": ["opencode-agents-toon"]
-}
-```
-
 ### GitHub
 
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["github:mmynsted/opencode-agents-toon"]
+  "plugin": ["github:mmynsted/opencode-toon-config-plugin"]
 }
 ```
 
@@ -98,7 +85,7 @@ OpenCode installs the plugin automatically on first run.
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["./path/to/opencode-agents-toon"]
+  "plugin": ["./path/to/opencode-toon-config-plugin"]
 }
 ```
 
@@ -276,13 +263,9 @@ The command file ships with the package at `commands/evaluate-toon.md`. Copy it 
 project's `.opencode/commands/` directory:
 
 ```sh
-# npm install
-mkdir -p .opencode/commands
-cp node_modules/opencode-agents-toon/commands/evaluate-toon.md .opencode/commands/
-
 # GitHub / auto-install
 mkdir -p .opencode/commands
-cp ~/.cache/opencode/node_modules/opencode-agents-toon/commands/evaluate-toon.md .opencode/commands/
+cp ~/.cache/opencode/packages/github:mmynsted/opencode-toon-config-plugin/node_modules/opencode-toon-config-plugin/commands/evaluate-toon.md .opencode/commands/
 ```
 
 #### Use
@@ -348,7 +331,7 @@ assessment, use `/evaluate-toon`.
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": [["opencode-agents-toon", { "evaluate": true }]]
+  "plugin": [["github:mmynsted/opencode-toon-config-plugin", { "evaluate": true }]]
 }
 ```
 

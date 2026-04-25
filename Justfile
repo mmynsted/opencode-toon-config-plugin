@@ -1,4 +1,4 @@
-# opencode-agents-toon — development recipes
+# opencode-toon-config-plugin — development recipes
 # Run any recipe: just <name>
 # List all recipes: just
 

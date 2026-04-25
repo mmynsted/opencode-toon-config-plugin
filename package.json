@@ -1,6 +1,6 @@
 {
-  "name": "opencode-agents-toon",
-  "version": "0.1.0",
+  "name": "opencode-toon-config-plugin",
+  "version": "0.1.1",
   "description": "OpenCode plugin that loads AGENTS.toon as your project rules file, saving ~15% tokens per turn vs Markdown.",
   "type": "module",
   "main": "./dist/index.js",
@@ -30,13 +30,13 @@
   ],
   "author": "Growing Liberty LLC",
   "license": "MIT",
-  "homepage": "https://github.com/mmynsted/opencode-agents-toon#readme",
+  "homepage": "https://github.com/mmynsted/opencode-toon-config-plugin#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mmynsted/opencode-agents-toon"
+    "url": "https://github.com/mmynsted/opencode-toon-config-plugin"
   },
   "bugs": {
-    "url": "https://github.com/mmynsted/opencode-agents-toon/issues"
+    "url": "https://github.com/mmynsted/opencode-toon-config-plugin/issues"
   },
   "peerDependencies": {
     "@opencode-ai/plugin": ">=1.0.0"
