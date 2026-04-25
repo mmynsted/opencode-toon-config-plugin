@@ -56,3 +56,10 @@ ci: check test
 # Full clean build + all tests
 [group('combined')]
 all: clean test
+
+# Install git hooks (run once after cloning)
+[group('help')]
+install-hooks:
+    cp scripts/pre-commit.sh .git/hooks/pre-commit
+    chmod +x .git/hooks/pre-commit
+    @echo "pre-commit hook installed"
