@@ -1,0 +1,50 @@
+{
+  "name": "opencode-agents-toon",
+  "version": "0.1.0",
+  "description": "OpenCode plugin that loads AGENTS.toon as your project rules file, saving ~15% tokens per turn vs Markdown.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "commands"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "bun test tests/",
+    "prepublishOnly": "rm -rf dist && tsc"
+  },
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "toon",
+    "agents",
+    "rules",
+    "token-efficient"
+  ],
+  "author": "Growing Liberty LLC",
+  "license": "MIT",
+  "homepage": "https://github.com/mmynsted/opencode-agents-toon#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mmynsted/opencode-agents-toon"
+  },
+  "bugs": {
+    "url": "https://github.com/mmynsted/opencode-agents-toon/issues"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": ">=1.0.0"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "^1.14.24",
+    "@types/node": "^20.0.0",
+    "gpt-tokenizer": "^3.4.0",
+    "typescript": "^5.0.0"
+  }
+}

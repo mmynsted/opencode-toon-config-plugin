@@ -1,0 +1,27 @@
+rules:
+  no_any: true
+  no_try_catch: "never except wrapping statSync/readFileSync"
+
+build:
+  cmd: "just build"
+  clean: "just clean"
+  typecheck: "just check"
+
+test:
+  unit: "just test"
+  heuristic: "just test-heuristic"
+  plugin: "just test-plugin"
+  ci: "just ci"
+  benchmark: "just bench"
+  demo: "just demo"
+  manual: "run opencode in this directory; stderr [agents-toon] loaded=ok / warn=problem"
+
+plugin:
+  hook: "experimental.chat.system.transform"
+  hook_sig: "(input: {sessionID?: string, model: Model}, output: {system: string[]}) => Promise<void>"
+  cache: "stat(mtime+size) -> SHA-256 -> memory"
+  cache_rule: "do_not_simplify  # keep 2-stage stat+hash; do not collapse to hash-only"
+
+workflow:
+  edit_plugin: "src/index.ts -> bun tsc (must pass) -> restart opencode to pick up changes"
+  publish: "bun tsc && npm publish --access public"
