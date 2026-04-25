@@ -268,6 +268,15 @@ mkdir -p .opencode/commands
 cp ~/.cache/opencode/packages/github:mmynsted/opencode-toon-config-plugin/node_modules/opencode-toon-config-plugin/commands/evaluate-toon.md .opencode/commands/
 ```
 
+Or globally (depending on where you installed the plugin):
+
+```sh
+# GitHub / auto-install
+mkdir -p "$HOME/.config/opencode/commands"
+cp ~/.cache/opencode/packages/github:mmynsted/opencode-toon-config-plugin/node_modules/opencode-toon-config-plugin/commands/evaluate-toon.md "$HOME/opencode/commands/"
+```
+
+
 #### Use
 
 ```
