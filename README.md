@@ -69,23 +69,16 @@ current.
 
 ## Installation
 
-### GitHub
+Add the plugin to your `opencode.json` (project-level) or `~/.config/opencode/opencode.json`
+(global). OpenCode supports local paths and npm packages; `github:` specifiers are not
+supported.
+
+### Local path
 
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["github:mmynsted/opencode-toon-config-plugin"]
-}
-```
-
-OpenCode installs the plugin automatically on first run.
-
-### Local path (development)
-
-```json
-{
-  "$schema": "https://opencode.ai/config.json",
-  "plugin": ["./path/to/opencode-toon-config-plugin"]
+  "plugin": ["/absolute/path/to/opencode-toon-config-plugin"]
 }
 ```
 
@@ -263,17 +256,16 @@ The command file ships with the package at `commands/evaluate-toon.md`. Copy it 
 project's `.opencode/commands/` directory:
 
 ```sh
-# GitHub / auto-install
+# local path install — copy from your checkout
 mkdir -p .opencode/commands
-cp ~/.cache/opencode/packages/github:mmynsted/opencode-toon-config-plugin/node_modules/opencode-toon-config-plugin/commands/evaluate-toon.md .opencode/commands/
+cp /path/to/opencode-toon-config-plugin/commands/evaluate-toon.md .opencode/commands/
 ```
 
-Or globally (depending on where you installed the plugin):
+Or globally:
 
 ```sh
-# GitHub / auto-install
 mkdir -p "$HOME/.config/opencode/commands"
-cp ~/.cache/opencode/packages/github:mmynsted/opencode-toon-config-plugin/node_modules/opencode-toon-config-plugin/commands/evaluate-toon.md "$HOME/opencode/commands/"
+cp /path/to/opencode-toon-config-plugin/commands/evaluate-toon.md "$HOME/.config/opencode/commands/"
 ```
 
 
@@ -340,7 +332,7 @@ assessment, use `/evaluate-toon`.
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": [["github:mmynsted/opencode-toon-config-plugin", { "evaluate": true }]]
+  "plugin": [["/absolute/path/to/opencode-toon-config-plugin", { "evaluate": true }]]
 }
 ```
 

@@ -1,6 +1,6 @@
 {
   "name": "opencode-toon-config-plugin",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "OpenCode plugin that loads AGENTS.toon as your project rules file, saving ~15% tokens per turn vs Markdown.",
   "type": "module",
   "main": "./dist/index.js",
