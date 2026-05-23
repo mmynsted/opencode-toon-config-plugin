@@ -1,4 +1,8 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": [[".", { "evaluate": true }]]
+  "plugin": [[".", { "evaluate": true }]],
+  "lsp": true,
+  "watcher": {
+    "ignore": ["dist/**", "node_modules/**", ".opencode/node_modules/**"]
+  }
 }
