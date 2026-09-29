@@ -39,10 +39,12 @@
     "url": "https://github.com/mmynsted/opencode-toon-config-plugin/issues"
   },
   "peerDependencies": {
-    "@opencode-ai/plugin": ">=1.0.0"
+    "@opencode/ai": ">=2.0.0",
+    "@opencode/plugin": ">=2.0.0"
   },
   "devDependencies": {
-    "@opencode-ai/plugin": "^1.14.24",
+    "@opencode/ai": "^2.0.19",
+    "@opencode/plugin": "^2.0.19",
     "@types/node": "^20.0.0",
     "gpt-tokenizer": "^3.4.0",
     "typescript": "^5.0.0"

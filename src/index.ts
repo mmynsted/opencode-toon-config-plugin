@@ -1,7 +1,8 @@
 import { createHash } from "crypto"
 import { statSync, readFileSync, existsSync } from "fs"
 import { join } from "path"
-import type { PluginModule, PluginOptions } from "@opencode-ai/plugin"
+import { Plugin } from "@opencode/plugin"
+import type { SystemPart } from "@opencode/ai"
 import { score, formatAnnotation } from "./heuristic.js"
 
 const FILENAME = "AGENTS.toon"
@@ -95,7 +96,7 @@ function refresh(filePath: string, cache: Cache, evaluate: boolean): Cache {
 
 // Validate and extract the evaluate option from plugin options.
 // Accepts: true, false, "true", "false", or absent (defaults to false).
-function resolveEvaluate(options: PluginOptions | undefined): boolean {
+function resolveEvaluate(options: Record<string, unknown> | undefined): boolean {
   if (options === undefined) return false
   const v = options["evaluate"]
   if (v === true || v === "true") return true
@@ -104,30 +105,50 @@ function resolveEvaluate(options: PluginOptions | undefined): boolean {
   return false
 }
 
-const plugin: PluginModule = {
-  id: "opencode-toon-config-plugin",
-  server: async ({ directory, worktree }, options) => {
-    const evaluate = resolveEvaluate(options)
-    const filePath = locate(directory, worktree)
-
-    if (!filePath) {
-      log(`no ${FILENAME} found`)
-      return {}
-    }
-
-    let cache = load(filePath, evaluate)
-    log(`loaded: ${filePath} ${cache.size}B ~${cache.tokens} tok${evaluate ? " evaluate=on" : ""}`)
-    if (evaluate && cache.annotation) log(`eval: ${cache.annotation.split("\n")[0]}`)
-
-    return {
-      "experimental.chat.system.transform": async (_input, output) => {
-        cache = refresh(filePath, cache, evaluate)
-        output.system.push(cache.content)
-        if (evaluate && cache.annotation) output.system.push(cache.annotation)
-      },
-    }
-  },
+// Shared state for one loaded plugin instance.
+type Instance = {
+  filePath: string
+  cache: Cache
+  evaluate: boolean
 }
 
-export default plugin
-export const { server } = plugin
+// Resolve the instance for a directory, or null when no AGENTS.toon exists.
+function initInstance(directory: string, worktree: string, evaluate: boolean): Instance | null {
+  const filePath = locate(directory, worktree)
+  if (!filePath) {
+    log(`no ${FILENAME} found`)
+    return null
+  }
+  const cache = load(filePath, evaluate)
+  log(`loaded: ${filePath} ${cache.size}B ~${cache.tokens} tok${evaluate ? " evaluate=on" : ""}`)
+  if (evaluate && cache.annotation) log(`eval: ${cache.annotation.split("\n")[0]}`)
+  return { filePath, cache, evaluate }
+}
+
+// Append the cached content (and annotation) to a system-instructions array.
+// V2 session hooks pass event.system as Array<SystemPart> ({ type: "text", text }).
+function applyToSystem(instance: Instance, system: Array<SystemPart>) {
+  instance.cache = refresh(instance.filePath, instance.cache, instance.evaluate)
+  system.push({ type: "text", text: instance.cache.content })
+  if (instance.evaluate && instance.cache.annotation) system.push({ type: "text", text: instance.cache.annotation })
+}
+
+export default Plugin.define({
+  id: "opencode-toon-config-plugin",
+  async setup(ctx) {
+    const evaluate = resolveEvaluate(ctx.options as Record<string, unknown> | undefined)
+    // Prefer the session location directory, fall back to the project directory
+    // (worktree root). ctx.location.directory is the session's working directory;
+    // ctx.location.project.directory is the project/worktree root in V2.
+    const instance = initInstance(
+      ctx.location.directory,
+      ctx.location.project.directory,
+      evaluate,
+    )
+    if (!instance) return
+
+    await ctx.session.hook("context", (event) => {
+      applyToSystem(instance, event.system)
+    })
+  },
+})

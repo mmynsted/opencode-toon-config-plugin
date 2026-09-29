@@ -1,6 +1,7 @@
 import { createHash } from "crypto";
 import { statSync, readFileSync, existsSync } from "fs";
 import { join } from "path";
+import { Plugin } from "@opencode/plugin";
 import { score, formatAnnotation } from "./heuristic.js";
 const FILENAME = "AGENTS.toon";
 const SERVICE = "agents-toon";
@@ -87,29 +88,40 @@ function resolveEvaluate(options) {
     log(`warn: unrecognised evaluate option value "${String(v)}", defaulting to false`);
     return false;
 }
-const plugin = {
+// Resolve the instance for a directory, or null when no AGENTS.toon exists.
+function initInstance(directory, worktree, evaluate) {
+    const filePath = locate(directory, worktree);
+    if (!filePath) {
+        log(`no ${FILENAME} found`);
+        return null;
+    }
+    const cache = load(filePath, evaluate);
+    log(`loaded: ${filePath} ${cache.size}B ~${cache.tokens} tok${evaluate ? " evaluate=on" : ""}`);
+    if (evaluate && cache.annotation)
+        log(`eval: ${cache.annotation.split("\n")[0]}`);
+    return { filePath, cache, evaluate };
+}
+// Append the cached content (and annotation) to a system-instructions array.
+// V2 session hooks pass event.system as Array<SystemPart> ({ type: "text", text }).
+function applyToSystem(instance, system) {
+    instance.cache = refresh(instance.filePath, instance.cache, instance.evaluate);
+    system.push({ type: "text", text: instance.cache.content });
+    if (instance.evaluate && instance.cache.annotation)
+        system.push({ type: "text", text: instance.cache.annotation });
+}
+export default Plugin.define({
     id: "opencode-toon-config-plugin",
-    server: async ({ directory, worktree }, options) => {
-        const evaluate = resolveEvaluate(options);
-        const filePath = locate(directory, worktree);
-        if (!filePath) {
-            log(`no ${FILENAME} found`);
-            return {};
-        }
-        let cache = load(filePath, evaluate);
-        log(`loaded: ${filePath} ${cache.size}B ~${cache.tokens} tok${evaluate ? " evaluate=on" : ""}`);
-        if (evaluate && cache.annotation)
-            log(`eval: ${cache.annotation.split("\n")[0]}`);
-        return {
-            "experimental.chat.system.transform": async (_input, output) => {
-                cache = refresh(filePath, cache, evaluate);
-                output.system.push(cache.content);
-                if (evaluate && cache.annotation)
-                    output.system.push(cache.annotation);
-            },
-        };
+    async setup(ctx) {
+        const evaluate = resolveEvaluate(ctx.options);
+        // Prefer the session location directory, fall back to the project directory
+        // (worktree root). ctx.location.directory is the session's working directory;
+        // ctx.location.project.directory is the project/worktree root in V2.
+        const instance = initInstance(ctx.location.directory, ctx.location.project.directory, evaluate);
+        if (!instance)
+            return;
+        await ctx.session.hook("context", (event) => {
+            applyToSystem(instance, event.system);
+        });
     },
-};
-export default plugin;
-export const { server } = plugin;
+});
 //# sourceMappingURL=index.js.map
