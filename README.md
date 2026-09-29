@@ -78,7 +78,14 @@ supported.
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["/absolute/path/to/opencode-toon-config-plugin"]
+  "plugins": [
+    {
+      "package": "/absolute/path/to/opencode-toon-config-plugin",
+      "options": {
+        "evaluate": false
+      }
+    }
+  ]
 }
 ```
 
@@ -96,7 +103,8 @@ does nothing. OpenCode falls back to its normal `AGENTS.md` / `CLAUDE.md` lookup
 
 ## Coexistence with AGENTS.md
 
-This plugin injects `AGENTS.toon` via the `experimental.chat.system.transform` hook.
+This plugin injects `AGENTS.toon` via the V2 `session.hook("context")` plugin hook
+(`Plugin.define` from `@opencode/plugin`, OpenCode 2.x).
 OpenCode's built-in `AGENTS.md` loading runs separately and is not disabled. If you have both
 files, both will be injected. Remove or rename your `AGENTS.md` once you have migrated to
 avoid duplication.
