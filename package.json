@@ -47,7 +47,7 @@
     "@opencode/plugin": "^2.0.19",
     "@types/node": "^20.0.0",
     "gpt-tokenizer": "^3.4.0",
-    "typescript": "^5.0.0"
+    "typescript": "^7.0.2"
   },
   "overrides": {
     "zod": "^4.6.6"
