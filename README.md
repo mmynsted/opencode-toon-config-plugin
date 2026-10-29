@@ -2,6 +2,8 @@
 
 An [OpenCode](https://opencode.ai) plugin that loads `AGENTS.toon` as your project rules file.
 
+**Requires OpenCode v2 or higher. This plugin uses the OpenCode v2 plugin API and does not work with OpenCode v1.**
+
 [TOON](https://github.com/toon-format/spec) (Token-Oriented Object Notation) is a compact,
 indentation-based format that encodes the same information as Markdown in fewer tokens. Because
 OpenCode injects your rules file into the system prompt on every LLM turn, a smaller file
@@ -72,6 +74,8 @@ current.
 Add the plugin to your `opencode.json` (project-level) or `~/.config/opencode/opencode.json`
 (global). OpenCode supports local paths and npm packages; `github:` specifiers are not
 supported.
+
+Requires OpenCode v2 or higher; the plugin does not work with OpenCode v1.
 
 ### Local path
 
@@ -362,6 +366,16 @@ INFO  2026-04-25T10:00:00 +0ms service=agents-toon loaded: /project/AGENTS.toon 
 INFO  2026-04-25T10:00:00 +0ms service=agents-toon eval: [toon-eval] format=toon tokens=~230
 ```
 
+## Security
+
+This repository uses GitHub's Dependabot for dependency alerts and version update pull
+requests, and a scheduled GitHub Actions workflow that runs `bun audit` against `bun.lock`
+to check for known vulnerabilities in the dependency tree. These are complementary:
+Dependabot monitors and updates dependencies, while the audit workflow provides an explicit
+lockfile vulnerability check on a schedule and on pull requests.
+
+You can run the same vulnerability check locally with `just audit`.
+
 ## Development
 
 The project uses [just](https://just.systems) as a task runner. Run `just` with no arguments to
@@ -377,6 +391,7 @@ list all recipes.
 | `just test`          | Run the full unit test suite (plugin + heuristic)         |
 | `just test-heuristic`| Run only the heuristic scorer tests                       |
 | `just test-plugin`   | Run only the plugin integration tests                     |
+| `just audit`         | Check dependencies for known vulnerabilities (same as CI) |
 | `just ci`            | Type-check then run all tests (CI equivalent)             |
 | `just demo`          | Print heuristic scores for good, bad, and hybrid examples |
 | `just bench`         | Token and timing benchmark: TOON vs Markdown fixtures     |

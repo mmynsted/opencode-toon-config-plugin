@@ -48,5 +48,8 @@
     "@types/node": "^20.0.0",
     "gpt-tokenizer": "^3.4.0",
     "typescript": "^5.0.0"
+  },
+  "overrides": {
+    "zod": "^4.6.6"
   }
 }

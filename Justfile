@@ -39,6 +39,11 @@ test-heuristic:
 test-plugin:
     bun test tests/plugin.test.ts
 
+# Check dependencies for known vulnerabilities (same check as CI)
+[group('test')]
+audit:
+    bun audit --audit-level=high
+
 # Show heuristic scores for good/bad/hybrid example files
 [group('scripts')]
 demo:
