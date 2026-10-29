@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@opencode/ai": "^2.0.19",
-    "@opencode/plugin": "^2.0.19",
+    "@opencode/plugin": "^2.1.4",
     "@types/node": "^20.0.0",
     "gpt-tokenizer": "^3.4.0",
     "typescript": "^5.0.0"
