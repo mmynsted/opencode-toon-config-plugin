@@ -71,13 +71,41 @@ current.
 
 ## Installation
 
-Add the plugin to your `opencode.json` (project-level) or `~/.config/opencode/opencode.json`
-(global). OpenCode supports local paths and npm packages; `github:` specifiers are not
-supported.
-
 Requires OpenCode v2 or higher; the plugin does not work with OpenCode v1.
 
+### Git install (recommended)
+
+OpenCode v2 installs this plugin from Git through its own plugin manager:
+
+```sh
+opencode plugin add github:mmynsted/opencode-toon-config-plugin#e5fb7ce31d50b41e626903746e8151212028528e
+```
+
+The spec pins an immutable commit so repeat installs are reproducible. OpenCode
+resolves the package, writes the spec into your global opencode.json `plugins`
+array, and loads the plugin from its committed built `dist/` artifacts. Git
+install relies on the committed dist artifacts plus the proof recipe
+(`just proof-git-install`), not on any install-time build step on your machine.
+
+For this reason the package deliberately declares no `build` or `prepare`
+lifecycle script: npm-family installers treat such scripts as a signal to run a
+dependency-preparation pass on the installing machine, which would reintroduce a
+host build-toolchain requirement. Build locally with `just build` and commit the
+`dist/` output.
+
+Verify the install:
+
+```sh
+opencode plugin list
+```
+
+The plugin id `opencode-toon-config-plugin` appears in the ID column
+regardless of source type.
+
 ### Local path
+
+Add the plugin to your `opencode.json` (project-level) or
+`~/.config/opencode/opencode.json` (global):
 
 ```json
 {
@@ -344,7 +372,9 @@ assessment, use `/evaluate-toon`.
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": [["/absolute/path/to/opencode-toon-config-plugin", { "evaluate": true }]]
+  "plugins": [
+    ["/absolute/path/to/opencode-toon-config-plugin", { "evaluate": true }]
+  ]
 }
 ```
 
@@ -395,6 +425,11 @@ list all recipes.
 | `just ci`            | Type-check then run all tests (CI equivalent)             |
 | `just demo`          | Print heuristic scores for good, bad, and hybrid examples |
 | `just bench`         | Token and timing benchmark: TOON vs Markdown fixtures     |
+| `just proof-git-install` | Prove Git install in a clean temp HOME via opencode plugin add/list |
+
+Future docs edits that touch the installation claim must pass `just
+proof-git-install`: the README's Git-install example is only true when the
+real OpenCode install path proves it.
 
 ### Test files
 
