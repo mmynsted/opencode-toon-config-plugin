@@ -78,7 +78,7 @@ Requires OpenCode v2 or higher; the plugin does not work with OpenCode v1.
 OpenCode v2 installs this plugin from Git through its own plugin manager:
 
 ```sh
-opencode plugin add github:mmynsted/opencode-toon-config-plugin#e5fb7ce31d50b41e626903746e8151212028528e
+opencode plugin add github:mmynsted/opencode-toon-config-plugin#v0.1.4
 ```
 
 The spec pins an immutable commit so repeat installs are reproducible. OpenCode
@@ -93,10 +93,10 @@ dependency-preparation pass on the installing machine, which would reintroduce a
 host build-toolchain requirement. Build locally with `just build` and commit the
 `dist/` output.
 
-Verify the install:
+Verify the install with the built-ins shown (user-installed plugins are listed by `opencode plugin list --builtin`):
 
 ```sh
-opencode plugin list
+opencode plugin list --builtin
 ```
 
 The plugin id `opencode-toon-config-plugin` appears in the ID column
